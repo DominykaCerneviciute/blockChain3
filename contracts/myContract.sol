@@ -73,7 +73,7 @@ function getHighestBidder() public view returns (address){
 }
 
 
-function withdraw() public payable
+function withdraw() public
 endOrCanceled
 returns (bool)
 {
