@@ -1,0 +1,91 @@
+.box {
+    display: inline-block;
+    position: relative;
+    margin: 0 .25rem;
+    font-size: 0;
+    line-height: 0;
+  }
+
+.pic{
+    max-width: 400px;
+}
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    padding: 8px 8px;
+    display: table-row-group;
+    vertical-align: middle;
+    border-color: inherit;
+  }
+  
+  
+  td{
+    width: 200px;
+    height: 20px;
+    text-align: left;
+    padding: 8px;
+    display: table-cell;
+  }
+  
+ .data {
+    text-align: center;
+  }
+    
+  tr{
+    border: 1px solid #dddddd;
+  }
+
+  #bid{
+      width: 25%;
+  }
+
+  #button1{
+      width: 10%;
+  }
+
+  form input{
+    
+    padding: 5px;
+    margin-top: 8px;
+  }
+  .allAuctions{
+    justify-content: center;
+    display: flex;
+  }
+  .auction{
+    border-style: solid;
+    padding-top: 100px;
+    width: 70%;
+    padding-bottom: 100px;
+    justify-content: center;
+    display: flex;
+  }
+.td1{
+    text-transform: uppercase;
+}
+.div3{
+  padding-left: 50px;
+}
+
+.timerClass{
+  justify-content: center;
+  display: flex;
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 5px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  body {
+    font-family: sans-serif;
+    background-color: #f5f5f5;
+    color: #222;
+  }
+  h1 {
+    justify-content: center;
+    display: flex;
+    font-size: 1.25rem;
+    font-weight: 500;
+    text-transform: uppercase;
+  }

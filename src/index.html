@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<body>
+<div class ="allAuctions">   
+    <div class = "auction">
+
+        <img class = "pic" src="car.jpg" alt="car for sell">
+
+
+        <div class="div3">
+        <h1>Time left</h1>
+        
+        <p class="timerClass" id="timer"></p>
+        <p class="timerClass" id="timerText"></p>
+
+
+        <table class = "auctionInfo">
+            <tr>
+                <td class="td1">Number of bidders:</td>
+                <td class="data" id="bidCount"></td>
+            </tr>
+            <tr>
+                <td class="td1">Starting price:</td>
+                <td class="data" id="startPrice"></td>
+            </tr>
+            <tr>
+                <td class="td1">Current price:</td>
+                <td class="data" id="currPrice"></td>
+            </tr>
+            <tr>
+                <td class="td1">Currently winning:</td>
+                <td class="data" id="winning"></td>
+            </tr>
+            <tr>
+                <td class="td1">Current Investment:</td>
+                <td class="data" id="investment"></td>
+            </tr>
+        </table>
+        <!-- <span id="account"></span> -->
+        <br>
+
+        
+            <input type="number" id="bid" hidden="true" disabled="true" name="biddingsum" placeholder="Your bidding sum..">
+            <input type="submit" onclick="App.placeBid()" hidden="true" disabled="true" id="button1" value="Bid">
+            <input type="submit" hidden="true" disabled="true" onclick="App.closeAuction()" id="button2" value="Close">
+            <input type="submit" hidden="true" disabled="true" onclick="App.withdraw()" id="button3" value="Withdraw">
+          
+        </div>
+    </div>
+</div>     
+<!-- <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script> -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="vendor/truffle-contract/dist/truffle-contract.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -8,23 +8,18 @@ uint public highestBid;
 address public highestBidder;
 bool public canceled;
 bool internal ownerHasWithdrawn = false;
-
+uint public startingPrice;
+uint public totalBidders;
 mapping(address => uint256) public bidder;
 
-struct car {
-string     Brand; 
-string     Rnumber;
-}
-
-car public Mycar;
-
-constructor(address _owner, uint _end, uint _highestBid) public{
+constructor(uint _end, uint _highestBid) public{
     
-    owner = _owner;
+    owner = msg.sender;
     auction_start = now;
-    auction_end = auction_start +  _end* 1 hours; 
-    highestBid = _highestBid;
+    auction_end = auction_start +  _end* 1 minutes; 
+    startingPrice = _highestBid;
     canceled = false;
+    totalBidders= 0;
     
 }
 
@@ -48,30 +43,51 @@ modifier endOrCanceled(){require(now >= auction_end || canceled == true);
     _;
 }
 
-function placeBid() public payable 
+function getInfo() view public returns(uint _highestBid, uint _startingPrice, address _highestBidder , bool _canceled , uint _totalBidders, uint _auction_end, address _owner){
+
+return(highestBid, startingPrice, highestBidder, canceled, totalBidders, auction_end, owner);
+}
+
+function placeBid(uint sum) public payable 
 an_ongoing_auction
 not_owner
 not_canceled
 {
     
-    require(bidder[msg.sender] + msg.value > highestBid);
-    uint newBid = bidder[msg.sender] + msg.value; 
+    require(sum > highestBid);
+    uint newBid = sum; 
     highestBid = newBid;
+    if(bidder[msg.sender] == 0){
+        totalBidders++;
+    }
     bidder[msg.sender] = newBid;
     highestBidder = msg.sender;
+
     
-    emit BidEvent(highestBidder, highestBid);
+    
+    emit BidEvent(highestBidder, totalBidders, highestBid);
 }
 
+function getCurrentInvestment() view public  returns (uint _bid){
+    return bidder[msg.sender];
+}
 
-function getHighestBid() public view returns (uint){
+function getHighestBid() view public  returns (uint){
     return highestBid;
 }
 
-function getHighestBidder() public view returns (address){
+function getHighestBidder() view public  returns (address){
+
     return highestBidder;
 }
 
+function getStartingPrice() view public  returns (uint){
+    return startingPrice;
+}
+
+function getEnd() public view returns (uint){
+    return auction_end;
+}
 
 function withdraw() public
 endOrCanceled
@@ -79,6 +95,8 @@ returns (bool)
 {
     uint amount;
     address account;
+
+
     
     if(canceled == true && msg.sender != owner){
         amount = bidder[msg.sender];
@@ -89,7 +107,6 @@ returns (bool)
         if(msg.sender == owner){
             amount = highestBid;
             account = highestBidder;
-            ownerHasWithdrawn = true;
         }
         
         else if(msg.sender != highestBidder){
@@ -99,36 +116,31 @@ returns (bool)
     }
     
     require(amount >0);
-    msg.sender.transfer(amount);
-    bidder[msg.sender] = 0;
-    WithdrawalEvent(account, amount);
+    // msg.sender.transfer(amount);
+    bidder[account] = 0;
+    totalBidders--;
+    emit WithdrawalEvent(account, amount);
     return true;
 }
 
 
-function cancelAuction() external
+function CloseAuction() external
 only_owner
 an_ongoing_auction
 not_canceled
 returns (bool) {
-    
+    highestBidder = address(0);
+    highestBid = 0;
+    startingPrice = 0;
+    auction_end = now;
     canceled = true;
-    emit CanceledEvent("CANCELED");
+    emit CloseEvent("ForceClose");
     return true;
 }
 
 
-function timeLeft() public view returns (uint){
-    uint time;
-    if(now>= auction_end) return 0;
-    else {
-        time = auction_end - now;
-        return time;
-    }
-}
-
-event BidEvent(address indexed highestBidder, uint highestBid);
+event BidEvent(address indexed buyer, uint totalBidders, uint amount);
 event WithdrawalEvent(address withdrawer, uint amount);
-event CanceledEvent(string message);
+event CloseEvent(string message);
 
 }
