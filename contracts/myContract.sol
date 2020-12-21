@@ -11,12 +11,13 @@ bool internal ownerHasWithdrawn = false;
 uint public startingPrice;
 uint public totalBidders;
 mapping(address => uint256) public bidder;
+bool ownerHasWithdrown = false;
 
 constructor(uint _end, uint _highestBid) public{
     
     owner = msg.sender;
     auction_start = now;
-    auction_end = auction_start +  _end* 1 minutes; 
+    auction_end = auction_start +  _end* 1 hours; 
     startingPrice = _highestBid;
     canceled = false;
     totalBidders= 0;
@@ -43,9 +44,9 @@ modifier endOrCanceled(){require(now >= auction_end || canceled == true);
     _;
 }
 
-function getInfo() view public returns(uint _highestBid, uint _startingPrice, address _highestBidder , bool _canceled , uint _totalBidders, uint _auction_end, address _owner){
+function getInfo() view public returns(uint, uint, address, bool, uint, uint, address, bool){
 
-return(highestBid, startingPrice, highestBidder, canceled, totalBidders, auction_end, owner);
+return(highestBid, startingPrice, highestBidder, canceled, totalBidders, auction_end, owner, ownerHasWithdrown);
 }
 
 function placeBid(uint sum) public payable 
@@ -54,7 +55,7 @@ not_owner
 not_canceled
 {
     
-    require(sum > highestBid);
+    require(sum > highestBid && sum > startingPrice);
     uint newBid = sum; 
     highestBid = newBid;
     if(bidder[msg.sender] == 0){
@@ -64,8 +65,7 @@ not_canceled
     highestBidder = msg.sender;
 
     
-    
-    emit BidEvent(highestBidder, totalBidders, highestBid);
+   emit BidEvent(highestBidder, totalBidders, highestBid);
 }
 
 function getCurrentInvestment() view public  returns (uint _bid){
@@ -114,12 +114,20 @@ returns (bool)
             account = msg.sender;
         }
     }
-    
+
+
     require(amount >0);
-    // msg.sender.transfer(amount);
+    //msg.sender.transfer(amount);
     bidder[account] = 0;
     totalBidders--;
-    emit WithdrawalEvent(account, amount);
+    if(msg.sender == owner){
+         emit winner(highestBidder);
+         emit WithdrawalEvent(account, amount);
+         highestBid = 0;
+         ownerHasWithdrown = true;
+    }
+    else emit WithdrawalEvent(account, amount);
+    
     return true;
 }
 
@@ -142,5 +150,5 @@ returns (bool) {
 event BidEvent(address indexed buyer, uint totalBidders, uint amount);
 event WithdrawalEvent(address withdrawer, uint amount);
 event CloseEvent(string message);
-
+event winner(address _winner);
 }

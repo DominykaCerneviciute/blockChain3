@@ -19,26 +19,19 @@ App = {
     } else {
       window.alert("Please connect to Metamask.")
     }
-    // Modern dapp browsers...
     if (window.ethereum) {
       window.web3 = new Web3(ethereum)
       try {
-        // Request account access if needed
         await ethereum.enable()
-        // Acccounts now exposed
         web3.eth.sendTransaction({/* ... */})
       } catch (error) {
-        // User denied account access...
       }
     }
-    // Legacy dapp browsers...
     else if (window.web3) {
       App.web3Provider = web3.currentProvider
       window.web3 = new Web3(web3.currentProvider)
-      // Acccounts always exposed
       web3.eth.sendTransaction({/* ... */})
     }
-    // Non-dapp browsers...
     else {
       console.log('Non-Ethereum browser detected. You should consider trying MetaMask!')
     }
@@ -78,7 +71,11 @@ App = {
       $('#currPrice').html(auctionInfo[0].c[0])
       $('#winning').html(auctionInfo[2])
       $('#investment').html(App.currentInvestment)
+      var inputbox = document.getElementById('bid');
+      inputbox.addEventListener('input', App.myFunction, false);
       App.clockInit(auctionInfo[5].c[0]);
+      console.log(auctionInfo);
+
       // Render Tasks
       // await App.renderTasks()
   
@@ -98,41 +95,62 @@ App = {
       else if(distance > 0){
 
         //Bid Button
-        document.getElementById("button1").disabled = false;
+        //document.getElementById("button1").disabled = false;
         document.getElementById("button1").hidden = false;
         // Bid input box
         document.getElementById("bid").disabled = false;
         document.getElementById("bid").hidden = false;
+        document.getElementById("bid").min = App.auctionInfo[0].c[0] + 1;
       }
       // If Autction Ended
       if (distance < 0) {
         clearInterval(x);
-        document.getElementById("timer").innerHTML = "AUCTION HAS ENDED";
+        if (!App.auctionInfo[3]) document.getElementById("timer").innerHTML = "AUCTION HAS ENDED";
+        else document.getElementById("timer").innerHTML = "AUCTION CANCELED";
         document.getElementById("button1").disabled = true;
         document.getElementById("button1").hidden = true;
         document.getElementById("bid").disabled = true;
         document.getElementById("bid").hidden = true;
+
+        if(App.account == App.auctionInfo[6] && distance < 0){
+          // Close button
+          document.getElementById("button2").hidden = true;
+          document.getElementById("button2").disabled = true;
+        }
 
         // 1. Closed && Owner != User
         // 2. Invested && Not Highest Bidder && not canceled
         // 3. Owner == user && not canceled
         if((App.currentInvestment > 0 && App.auctionInfo[3] && App.auctionInfo[6] != App.account) 
         || (App.currentInvestment > 0 && App.account != App.auctionInfo[2] && !App.auctionInfo[3])
-        || (App.auctionInfo[6] == App.account && !App.auctionInfo[3])){
+        || (App.auctionInfo[6] == App.account && !App.auctionInfo[3] && !App.auctionInfo[7])){
           document.getElementById("button3").hidden = false;
           document.getElementById("button3").disabled = false;
         }
-        if(App.account == App.auctionInfo[2] && App.currentInvestment > 0){
-          document.getElementById("timerText").innerHTML = "YOU HAVE WON!";
-          document.getElementById("timerText").style.color = "green";
-        }else if(App.currentInvestment > 0){
-          document.getElementById("timerText").innerHTML = "YOU HAVE LOST! :(";
-          document.getElementById("timerText").style.color = "red";
-        }
 
+      
+
+        if(!App.auctionInfo[3]){
+          if(App.account == App.auctionInfo[2] && App.currentInvestment > 0){
+            document.getElementById("timerText").innerHTML = "YOU HAVE WON!";
+            document.getElementById("timerText").style.color = "green";
+          }else if(App.currentInvestment > 0){
+            document.getElementById("timerText").innerHTML = "YOU HAVE LOST! :(";
+            document.getElementById("timerText").style.color = "red";
+        }
+      }
       }
     },
 
+    myFunction: async () => {
+      if($('#bid').val() >= App.auctionInfo[0].c[0] + 1 && $('#bid').val() >= App.auctionInfo[1].c[0] + 1){
+        document.getElementById("button1").disabled = false;
+        console.log($('#bid').val())
+      }else{
+        document.getElementById("button1").disabled = true;
+        console.log($('#bid').val())
+     }
+    },
 
     setLoading: (boolean) => {
       App.loading = boolean
@@ -149,23 +167,26 @@ App = {
 
     withdraw : async () => {
       await App.auction.withdraw();
-      window.location.reload()
     },
     placeBid: async () => {
       console.log("Click!");
       var bidSum = $('#bid').val()
-
       // App.setLoading(true)
+
+      // web3.eth.sendTransaction({
+      // to:'0xf17f52151EbEF6C7334FAD080c5704D77216b732', 
+      // from: App.account, 
+      // value:web3.toWei(bidSum, "ether")
+      // }, console.log)
+
       await App.auction.placeBid(parseInt(bidSum));
       window.location.reload()
     },
     
     getEnd: async () => {
-      //App.setLoading(true)
-
       return await App.auction.getEnd();
-      //window.location.reload()
     },
+
     closeAuction: async () =>{
       await App.auction.CloseAuction();
       window.location.reload()
