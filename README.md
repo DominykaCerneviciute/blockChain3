@@ -28,6 +28,7 @@
 3. Remix'e environment pasirinkau Injected Web3
 4. Atlikau transakcijas
 
+![etherscan](2.png)
 
 #### Paleidimas
 1. truffle migrate --reset
