@@ -14,13 +14,14 @@
     - Pardavėjas išsitraukia laimėtojo sumą
     - Pralaimėtojai susigražina statytas sumas
     
-##### Įgyvendinimas
+#### Įgyvendinimas
 1. Kontraktas kurtas ir testuotas Remix IDE
-2. Sukūrimui ir testavimui lokaliame tinkle naudotas Ganache 
-3. Sąsajos įgalinimui su Ethereum tinklu naudotas metamask
-4. Testavimui testiniame tinkle naudojau Ropstan
+2. Diegimui ir testavimui naudotas Truffle IDE
+3. Sukūrimui ir testavimui lokaliame tinkle naudotas Ganache 
+4. Sąsajos įgalinimui su Ethereum tinklu naudotas metamask
+5. Testavimui testiniame tinkle naudojau Ropstan
 
 
-##### Paleidimas
+#### Paleidimas
 1. truffle migrate --reset
 2. npm run dev
