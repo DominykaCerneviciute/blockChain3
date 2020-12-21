@@ -29,6 +29,7 @@
 4. Atlikau transakcijas
 
 ![etherscan](2.PNG)
+![etherscan](3.PNG)
 
 #### Paleidimas
 1. truffle migrate --reset
