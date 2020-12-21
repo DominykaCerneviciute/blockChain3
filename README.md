@@ -22,14 +22,15 @@
 5. Testavimui testiniame tinkle naudojau Ropstan
 
 
-#### Paleidimas
-1. truffle migrate --reset
-2. npm run dev
-
-
-#### Ropstan
+#### Testavimas Ropstan
 1. Metamask'e pasirinkau Ropstan tinklą
 2. Atsisiunčiau testinių ether'ių iš https://faucet.dimensions.network/
 3. Remix'e environment pasirinkau Injected Web3
 4. Atlikau transakcijas
+
+
+#### Paleidimas
+1. truffle migrate --reset
+2. npm run dev
+
 
