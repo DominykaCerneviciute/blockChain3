@@ -18,3 +18,9 @@
 1. Kontraktas kurtas ir testuotas Remix IDE
 2. Sukūrimui ir testavimui lokaliame tinkle naudotas Ganache 
 3. Sąsajos įgalinimui su Ethereum tinklu naudotas metamask
+4. Testavimui testiniame tinkle naudojau Ropstan
+
+
+##### Paleidimas
+1. truffle migrate --reset
+2. npm run dev
