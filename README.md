@@ -22,7 +22,8 @@
 5. Testavimui testiniame tinkle naudojau Ropstan
 
 
-#### Testavimas Ropstan
+#### Testavimas 
+##### Ropstan
 1. Metamask'e pasirinkau Ropstan tinklą
 2. Atsisiunčiau testinių ether'ių iš https://faucet.dimensions.network/
 3. Remix'e environment pasirinkau Injected Web3
@@ -30,6 +31,9 @@
 
 ![etherscan](2.PNG)
 ![etherscan](3.PNG)
+
+##### Truffle test
+![test](test.PNG)
 
 #### Paleidimas
 1. truffle migrate --reset
